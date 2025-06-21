@@ -21,8 +21,8 @@ services:
   phpmyadmin:
     image: phpmyadmin
     container_name: phpmyadmin 
-    links:
-      - db
+    environment:
+      PMA_HOST: mysql
     ports:
       - 8081:80
 
