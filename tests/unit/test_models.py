@@ -10,7 +10,7 @@ def test_new_user():
     user = User('byan', 'byan@mwsu.edu', 'Qwerty@123!')
     assert user.username == 'byan'
     assert user.email == 'byan@mwsu.edu'
-    assert user.password_hash == 'Qwerty@123!'
+    assert user.password_hash == 'Qwerty@123'
 
 def test_setting_password(new_user):
     """
