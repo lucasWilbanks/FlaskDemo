@@ -1,4 +1,4 @@
-#    This is a demo project used for CSC324 DevOps.  
+#    This is a demo project used for DevOps.  
 ##   What is covered?  
 ###  1. Foundations  
 ###  2. Creating a Flask application  
