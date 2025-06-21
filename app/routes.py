@@ -1,27 +1,30 @@
 from app import app
-from app import db
-from flask import render_template, flash, redirect, request, url_for, jsonify
+from flask import render_template, flash, redirect, request, url_for, jsonify #,current_app
+from app import app
 from app.forms import LoginForm
 import requests
+from app import db
 from flask_login import current_user, login_user
 from app.models import User
 from flask_login import logout_user
 from flask_login import login_required
 from flask import request
-from werkzeug.urls import url_parse
+from urllib.parse import urlparse
 from app.forms import RegistrationForm
 
+
+#routes – URLs where a flask app accepts requests
 @app.route('/')
 @app.route('/index')
-@login_required
+#a view function – route handler
 def index():
     user = {'username': 'byan'}
-    classes = [{'classInfo': {'code': 'CSC324', 'title': 'DevOps'}, 'instructor': 'Baoqiang Yan'},
-               {'classInfo': {'code': 'CSC184', 'title': 'Python Programming'}, 'instructor': 'Evan Noynaert'}]
-    return render_template('index.html', title='Home', user=user)
+    classes = [{'classInfo': {'code': 'ITE367', 'title': 'Enterprise App Development'}, 'instructor': 'Baoqiang Yan'}, {'classInfo': {'code': 'CS318', 'title': 'Computer Science II'}, 'instructor': 'Adam Lewis'}]
+    # print(current_app.config)
+    return render_template('index.html', title='Home', user=user, classes=classes) 
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login',methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -36,8 +39,48 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-
     return render_template('login.html', title='Sign In', form=form)
+
+
+@app.route('/json', methods=['GET'])
+def jsonTest():
+    # return jsonify(list(range(5)))
+    instructor = {"username": "byan",
+                  "role": "instructor",
+                  "uid": 11,
+                  "name":
+                      {"firstname": "Baoqiang",
+                       "lastname": "Yan"
+                       }
+                  }
+
+    return jsonify(instructor)
+
+'''
+@app.route('/restlogin', methods=['GET', 'POST'])
+def loginAPI():
+    json_data = request.get_json(force = True)
+    if json_data:
+        username = json_data["username"]
+        password = json_data["password"]
+    else:
+        return '{"Success":false}'
+    if username == 'byan' and password == '123':
+        return '{"Success":true}'
+    return '{"Success":false}'
+'''
+
+@app.route('/loginapi', methods=['GET', 'POST'])
+def loginAPI():
+    json_data = request.get_json(force = True)
+    if json_data:
+        username = json_data["username"]
+        password = json_data["password"]
+    else:
+        return jsonify(Success=False)
+    if username == 'byan' and password == '123':
+        return jsonify(Success=True, uid=11)
+    return jsonify(Success=False)
 
 @app.route('/logout')
 def logout():
@@ -57,28 +100,3 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
-
-@app.route('/json')
-def jsonTest():
-    # return jsonify(list(range(5)))
-    instructor = {	"username": "byan",
-        "role": "instructor",
-        "uid": 11,
-        "name": {"firstname": "Baoqiang",
-        "lastname": "Yan"
-        }
-    }
-    return jsonify(instructor)
-
-
-@app.route('/loginapi', methods=['GET', 'POST'])
-def loginAPI():
-    json_data = request.get_json(force = True)
-    if json_data:
-        username = json_data["username"]
-        password = json_data["password"]
-    else:
-        return jsonify(Success=False)
-    if username == 'byan' and password == '123':
-        return jsonify(Success=True, uid=11)
-    return jsonify(Success=False)
