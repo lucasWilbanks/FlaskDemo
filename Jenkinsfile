@@ -1,7 +1,7 @@
 pipeline {
 	agent any
 	environment {
-		VERSION = '3.0.2'
+		VERSION = '3.1.1'
 		DOCKERHUB_CREDENTIALS = credentials('docker-lwilbanks-credentials')
 	}
 	stages {
