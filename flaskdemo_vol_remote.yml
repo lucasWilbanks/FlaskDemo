@@ -1,6 +1,6 @@
 services:
   flaskdemo:
-    image: baoqiangy/flaskdemo
+    image: lwilbanks/flaskdemo
     container_name: flaskdemo
     ports:
       - "5000:5000"
